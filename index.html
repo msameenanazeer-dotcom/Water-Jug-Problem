@@ -1,0 +1,294 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Water Jug Problem - AI</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f2f7ff;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #1d3557;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .jugs {
+        display: flex;
+        justify-content: center;
+        gap: 100px;
+        margin: 30px 0;
+    }
+
+    .jug-container {
+        text-align: center;
+    }
+
+    .jug {
+        width: 130px;
+        height: 220px;
+        border: 5px solid #333;
+        border-top: none;
+        border-radius: 0 0 25px 25px;
+        position: relative;
+        overflow: hidden;
+        background: #eee;
+        margin: auto;
+    }
+
+    .water {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #2196f3;
+        transition: height 0.7s ease;
+    }
+
+    .amount {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .capacity {
+        font-size: 18px;
+        color: #555;
+    }
+
+    .movement {
+        font-size: 22px;
+        font-weight: bold;
+        color: #e63946;
+        min-height: 35px;
+        margin: 20px;
+    }
+
+    button {
+        padding: 12px 25px;
+        margin: 8px;
+        border: none;
+        border-radius: 8px;
+        background: #1d3557;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #457b9d;
+    }
+
+    .steps {
+        text-align: left;
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .steps div {
+        padding: 8px;
+        margin: 5px;
+        background: white;
+        border-left: 5px solid #2196f3;
+    }
+
+    .current {
+        background: #d8f3dc !important;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💧 Water Jug Problem</h1>
+
+    <p>
+        <b>Problem:</b> Using a 4-liter jug and a 3-liter jug,
+        measure exactly <b>2 liters</b>.
+    </p>
+
+    <div class="jugs">
+
+        <div class="jug-container">
+            <h2>4 Liter Jug</h2>
+
+            <div class="jug">
+                <div class="water" id="water4"></div>
+            </div>
+
+            <div class="amount">
+                <span id="amount4">0</span> L
+            </div>
+
+            <div class="capacity">
+                Capacity = 4 L
+            </div>
+        </div>
+
+
+        <div class="jug-container">
+            <h2>3 Liter Jug</h2>
+
+            <div class="jug">
+                <div class="water" id="water3"></div>
+            </div>
+
+            <div class="amount">
+                <span id="amount3">0</span> L
+            </div>
+
+            <div class="capacity">
+                Capacity = 3 L
+            </div>
+        </div>
+
+    </div>
+
+    <div class="movement" id="movement">
+        Click "Start Solution"
+    </div>
+
+    <button onclick="startSolution()">▶ Start Solution</button>
+    <button onclick="nextStep()">➡ Next Step</button>
+    <button onclick="reset()">🔄 Reset</button>
+
+    <div class="steps">
+        <h2>Solution Steps</h2>
+
+        <div id="step0">0. Initial state: (0, 0)</div>
+        <div id="step1">1. Fill 3L jug → (0, 3)</div>
+        <div id="step2">2. Pour 3L → 4L → (3, 0)</div>
+        <div id="step3">3. Fill 3L jug → (3, 3)</div>
+        <div id="step4">4. Pour 3L → 4L → (4, 2)</div>
+    </div>
+
+</div>
+
+
+<script>
+
+let currentStep = 0;
+
+const states = [
+    {
+        a: 0,
+        b: 0,
+        text: "Initial State: Both jugs are empty"
+    },
+    {
+        a: 0,
+        b: 3,
+        text: "Fill the 3L jug"
+    },
+    {
+        a: 3,
+        b: 0,
+        text: "Pour water from 3L jug → 4L jug"
+    },
+    {
+        a: 3,
+        b: 3,
+        text: "Fill the 3L jug again"
+    },
+    {
+        a: 4,
+        b: 2,
+        text: "Pour 3L jug → 4L jug. Exactly 2L remains!"
+    }
+];
+
+
+function showStep(step) {
+
+    let state = states[step];
+
+    document.getElementById("amount4").innerText = state.a;
+    document.getElementById("amount3").innerText = state.b;
+
+    document.getElementById("water4").style.height =
+        (state.a / 4 * 100) + "%";
+
+    document.getElementById("water3").style.height =
+        (state.b / 3 * 100) + "%";
+
+    document.getElementById("movement").innerText =
+        state.text;
+
+    for(let i = 0; i < states.length; i++) {
+        let element = document.getElementById("step" + i);
+
+        if(i === step) {
+            element.classList.add("current");
+        } else {
+            element.classList.remove("current");
+        }
+    }
+}
+
+
+function nextStep() {
+
+    if(currentStep < states.length - 1) {
+        currentStep++;
+        showStep(currentStep);
+    } else {
+        document.getElementById("movement").innerText =
+            "🎉 Goal reached! 2 liters measured.";
+    }
+}
+
+
+function startSolution() {
+
+    currentStep = 0;
+    showStep(0);
+
+    let timer = setInterval(function() {
+
+        if(currentStep < states.length - 1) {
+            currentStep++;
+            showStep(currentStep);
+        } else {
+            clearInterval(timer);
+            document.getElementById("movement").innerText =
+                "🎉 Goal reached! Exactly 2 liters!";
+        }
+
+    }, 1500);
+}
+
+
+function reset() {
+
+    currentStep = 0;
+    showStep(0);
+
+}
+
+showStep(0);
+
+</script>
+
+</body>
+</html>
+```
