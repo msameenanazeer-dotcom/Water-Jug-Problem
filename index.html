@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Water Jug Problem - AI Solver</title>
+    <title>Water Jug Problem</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -16,8 +15,8 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            min-height: 100vh;
             background: linear-gradient(135deg, #dff6ff, #8ed8ff);
+            min-height: 100vh;
             color: #17324d;
         }
 
@@ -26,23 +25,21 @@
             max-width: 1100px;
             margin: 30px auto;
             background: white;
-            border-radius: 22px;
             padding: 30px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         h1 {
             text-align: center;
             color: #075985;
-            margin-bottom: 10px;
         }
 
-        .description {
-            text-align: center;
+        .problem {
             background: #e0f2fe;
+            padding: 20px;
             border-radius: 15px;
-            padding: 18px;
-            margin-bottom: 25px;
+            text-align: center;
             line-height: 1.6;
         }
 
@@ -51,21 +48,20 @@
             font-weight: bold;
         }
 
-        /* JUG AREA */
+        /* JUGS */
 
         .jugs {
             display: flex;
             justify-content: center;
-            align-items: flex-end;
             gap: 80px;
             margin: 40px 0;
         }
 
-        .jug-container {
+        .jug-box {
             text-align: center;
         }
 
-        .jug-container h2 {
+        .jug-box h2 {
             color: #075985;
         }
 
@@ -78,84 +74,56 @@
             position: relative;
             overflow: hidden;
             background: #f0f9ff;
-            margin: auto;
-        }
-
-        .jug::before {
-            content: "";
-            position: absolute;
-            top: -12px;
-            left: 15px;
-            right: 15px;
-            height: 15px;
-            border: 5px solid #075985;
-            border-bottom: none;
-            border-radius: 15px 15px 0 0;
         }
 
         .water {
             position: absolute;
             bottom: 0;
-            left: 0;
             width: 100%;
             background: linear-gradient(
                 to top,
                 #0284c7,
                 #38bdf8
             );
-            transition: height 0.8s ease;
+            transition: height 1s ease;
         }
 
-        .water::after {
+        .water::before {
             content: "";
             position: absolute;
             top: 0;
-            left: 0;
             width: 100%;
-            height: 8px;
+            height: 7px;
             background: rgba(255,255,255,0.5);
         }
 
         .amount {
-            margin-top: 15px;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
+            margin-top: 15px;
             color: #0369a1;
         }
 
-        /* CONTROLS */
+        /* BUTTONS */
 
-        .controls {
+        .buttons {
             text-align: center;
-            margin-top: 20px;
+            margin: 20px;
         }
 
         button {
             border: none;
-            padding: 13px 20px;
+            padding: 13px 22px;
             margin: 6px;
             border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
             color: white;
+            font-weight: bold;
+            font-size: 15px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
         button:hover {
-            transform: translateY(-2px);
-        }
-
-        .fill {
-            background: #2563eb;
-        }
-
-        .empty {
-            background: #dc2626;
-        }
-
-        .pour {
-            background: #7c3aed;
+            opacity: 0.85;
         }
 
         .solve {
@@ -167,85 +135,68 @@
         }
 
         .reset {
-            background: #475569;
+            background: #dc2626;
         }
 
         /* STATUS */
 
         .status {
             text-align: center;
-            margin-top: 25px;
-            font-size: 20px;
+            font-size: 21px;
             font-weight: bold;
-            min-height: 35px;
+            margin: 20px;
+            min-height: 30px;
         }
 
-        .info {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
+        /* STEPS */
 
-        /* SOLUTION */
-
-        .solution {
-            margin-top: 30px;
+        .steps {
             background: #f8fafc;
-            border-radius: 15px;
             padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
         }
 
-        .solution h2 {
+        .steps h2 {
             text-align: center;
             color: #075985;
         }
 
-        #solutionSteps {
-            max-width: 700px;
-            margin: auto;
-        }
-
         .step {
-            padding: 10px 15px;
-            margin: 6px 0;
             background: white;
+            padding: 12px;
+            margin: 8px auto;
             border-radius: 8px;
+            max-width: 700px;
             border-left: 5px solid #0284c7;
         }
 
-        .current {
+        .active {
             background: #fef08a;
             border-left-color: #eab308;
             font-weight: bold;
         }
 
-        /* RESPONSIVE */
+        .success {
+            color: green;
+            font-size: 24px;
+        }
 
         @media (max-width: 700px) {
 
             .jugs {
-                gap: 25px;
+                gap: 20px;
             }
 
             .jug {
                 width: 120px;
                 height: 230px;
             }
-
-            .info {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
         }
-
     </style>
 
 </head>
+
 
 <body>
 
@@ -253,22 +204,22 @@
 
     <h1>💧 Water Jug Problem</h1>
 
-    <div class="description">
+
+    <div class="problem">
 
         <p>
-            You have two jugs:
-            <b>4-liter</b> and <b>3-liter</b>.
+            We have two jugs:
+            <b>4 Litres</b> and <b>3 Litres</b>.
+        </p>
+
+        <p>
+            The objective is to get exactly
+            <span class="goal">2 Litres</span>
+            in one jug.
         </p>
 
         <p>
             The jugs have no measurement markings.
-            Your goal is to measure exactly
-            <span class="goal">2 liters</span>.
-        </p>
-
-        <p>
-            🧠 Click <b>Solve Automatically</b> to let the AI
-            find and demonstrate the solution.
         </p>
 
     </div>
@@ -278,47 +229,51 @@
 
     <div class="jugs">
 
-        <!-- 4 LITER JUG -->
+        <!-- 4 LITRE -->
 
-        <div class="jug-container">
+        <div class="jug-box">
 
-            <h2>🪣 4 Liter Jug</h2>
+            <h2>🪣 4 Litre Jug</h2>
 
             <div class="jug">
 
                 <div
                     id="water4"
                     class="water"
-                    style="height: 0%">
+                    style="height:0%">
                 </div>
 
             </div>
 
             <div class="amount">
+
                 <span id="amount4">0</span> / 4 L
+
             </div>
 
         </div>
 
 
-        <!-- 3 LITER JUG -->
+        <!-- 3 LITRE -->
 
-        <div class="jug-container">
+        <div class="jug-box">
 
-            <h2>🪣 3 Liter Jug</h2>
+            <h2>🪣 3 Litre Jug</h2>
 
             <div class="jug">
 
                 <div
                     id="water3"
                     class="water"
-                    style="height: 0%">
+                    style="height:0%">
                 </div>
 
             </div>
 
             <div class="amount">
+
                 <span id="amount3">0</span> / 3 L
+
             </div>
 
         </div>
@@ -326,60 +281,20 @@
     </div>
 
 
-    <!-- CONTROLS -->
+    <!-- BUTTONS -->
 
-    <div class="controls">
-
-        <button
-            class="fill"
-            onclick="fillJug(4)">
-            Fill 4L
-        </button>
-
-        <button
-            class="fill"
-            onclick="fillJug(3)">
-            Fill 3L
-        </button>
-
-        <button
-            class="empty"
-            onclick="emptyJug(4)">
-            Empty 4L
-        </button>
-
-        <button
-            class="empty"
-            onclick="emptyJug(3)">
-            Empty 3L
-        </button>
-
-        <br>
-
-        <button
-            class="pour"
-            onclick="pour(4,3)">
-            Pour 4L → 3L
-        </button>
-
-        <button
-            class="pour"
-            onclick="pour(3,4)">
-            Pour 3L → 4L
-        </button>
-
-        <br>
+    <div class="buttons">
 
         <button
             class="solve"
-            onclick="solveGame()">
+            onclick="solve()">
             🧠 Solve Automatically
         </button>
 
         <button
             class="next"
             onclick="nextStep()">
-            ▶️ Next Step
+            ▶ Next Step
         </button>
 
         <button
@@ -397,39 +312,22 @@
         id="status"
         class="status">
 
-        Ready! Goal: Get exactly 2 liters.
+        Click "Solve Automatically" to start.
 
     </div>
 
 
-    <!-- INFO -->
+    <!-- SOLUTION STEPS -->
 
-    <div class="info">
+    <div class="steps">
 
-        <div>
-            💧 Total Water:
-            <span id="totalWater">0</span> L
-        </div>
+        <h2>📋 Solution Steps</h2>
 
-        <div>
-            🔄 Moves:
-            <span id="moves">0</span>
-        </div>
+        <div id="steps">
 
-    </div>
-
-
-    <!-- SOLUTION -->
-
-    <div class="solution">
-
-        <h2>🧠 AI Solution Steps</h2>
-
-        <div id="solutionSteps">
-
-            Click
-            <b>🧠 Solve Automatically</b>
-            to find the solution.
+            <div class="step">
+                Step 0: Start → (0, 0)
+            </div>
 
         </div>
 
@@ -447,15 +345,78 @@
     */
 
     let jug4 = 0;
+
     let jug3 = 0;
-
-    let moves = 0;
-
-    let solution = [];
 
     let currentStep = 0;
 
-    let solving = false;
+    let timer = null;
+
+
+    /*
+    ==========================================
+    SOLUTION
+    ==========================================
+
+    State format:
+
+    (4L jug, 3L jug)
+
+    Start:
+    (0,0)
+
+    Step 1:
+    Fill 3L
+    (0,3)
+
+    Step 2:
+    Pour 3L -> 4L
+    (3,0)
+
+    Step 3:
+    Fill 3L
+    (3,3)
+
+    Step 4:
+    Pour 3L -> 4L
+    (4,2)
+
+    Goal achieved!
+    */
+
+    const solution = [
+
+        {
+            action: "Start",
+            a: 0,
+            b: 0
+        },
+
+        {
+            action: "Fill the 3L jug",
+            a: 0,
+            b: 3
+        },
+
+        {
+            action: "Pour 3L → 4L",
+            a: 3,
+            b: 0
+        },
+
+        {
+            action: "Fill the 3L jug",
+            a: 3,
+            b: 3
+        },
+
+        {
+            action: "Pour 3L → 4L",
+            a: 4,
+            b: 2
+        }
+
+    ];
 
 
     /*
@@ -466,596 +427,130 @@
 
     function render() {
 
-        document.getElementById("amount4").textContent = jug4;
+        document.getElementById("amount4")
+            .textContent = jug4;
 
-        document.getElementById("amount3").textContent = jug3;
+        document.getElementById("amount3")
+            .textContent = jug3;
 
-        document.getElementById("water4").style.height =
+
+        document.getElementById("water4")
+            .style.height =
             (jug4 / 4 * 100) + "%";
 
-        document.getElementById("water3").style.height =
+
+        document.getElementById("water3")
+            .style.height =
             (jug3 / 3 * 100) + "%";
 
-        document.getElementById("moves").textContent =
-            moves;
-
-        document.getElementById("totalWater").textContent =
-            jug4 + jug3;
-
     }
 
 
     /*
     ==========================================
-    FILL JUG
+    SHOW STEPS
     ==========================================
     */
 
-    function fillJug(size) {
+    function showSteps() {
 
-        if (solving) return;
+        const box =
+            document.getElementById("steps");
 
-        if (size === 4) {
+        box.innerHTML = "";
 
-            jug4 = 4;
 
-            setStatus("💧 Filled the 4-liter jug.", "#2563eb");
+        solution.forEach((step, index) => {
 
-        } else {
+            const div =
+                document.createElement("div");
 
-            jug3 = 3;
+            div.className = "step";
 
-            setStatus("💧 Filled the 3-liter jug.", "#2563eb");
+            div.id =
+                "step" + index;
 
-        }
 
-        moves++;
+            if (index === currentStep) {
 
-        checkGoal();
-
-        render();
-
-    }
-
-
-    /*
-    ==========================================
-    EMPTY JUG
-    ==========================================
-    */
-
-    function emptyJug(size) {
-
-        if (solving) return;
-
-        if (size === 4) {
-
-            jug4 = 0;
-
-            setStatus("🗑️ Emptying the 4-liter jug.", "#dc2626");
-
-        } else {
-
-            jug3 = 0;
-
-            setStatus("🗑️ Emptying the 3-liter jug.", "#dc2626");
-
-        }
-
-        moves++;
-
-        checkGoal();
-
-        render();
-
-    }
-
-
-    /*
-    ==========================================
-    POUR WATER
-    ==========================================
-    */
-
-    function pour(from, to) {
-
-        if (solving) return;
-
-        if (from === 4 && to === 3) {
-
-            let amount = Math.min(
-                jug4,
-                3 - jug3
-            );
-
-            jug4 -= amount;
-
-            jug3 += amount;
-
-            setStatus(
-                "💦 Poured water from 4L → 3L.",
-                "#7c3aed"
-            );
-
-        }
-
-        else if (from === 3 && to === 4) {
-
-            let amount = Math.min(
-                jug3,
-                4 - jug4
-            );
-
-            jug3 -= amount;
-
-            jug4 += amount;
-
-            setStatus(
-                "💦 Poured water from 3L → 4L.",
-                "#7c3aed"
-            );
-
-        }
-
-        moves++;
-
-        checkGoal();
-
-        render();
-
-    }
-
-
-    /*
-    ==========================================
-    CHECK GOAL
-    ==========================================
-    */
-
-    function checkGoal() {
-
-        if (jug4 === 2 || jug3 === 2) {
-
-            setStatus(
-                "🎉 SUCCESS! You measured exactly 2 liters! 🏆",
-                "green"
-            );
-
-        }
-
-    }
-
-
-    /*
-    ==========================================
-    BFS SOLVER
-    ==========================================
-    */
-
-    function findSolution() {
-
-        const start = [0, 0];
-
-        const queue = [start];
-
-        const visited = new Set();
-
-        const parent = new Map();
-
-        const action = new Map();
-
-
-        visited.add("0,0");
-
-
-        while (queue.length > 0) {
-
-            const current = queue.shift();
-
-            const a = current[0];
-            const b = current[1];
-
-            /*
-                Goal
-            */
-
-            if (a === 2 || b === 2) {
-
-                let path = [];
-
-                let key = a + "," + b;
-
-                while (key !== "0,0") {
-
-                    path.unshift(action.get(key));
-
-                    key = parent.get(key);
-
-                }
-
-                return path;
+                div.classList.add("active");
 
             }
 
 
-            let states = [];
+            div.innerHTML =
+
+                "<b>Step " +
+                index +
+                ":</b> " +
+
+                step.action +
+
+                " → " +
+
+                "(" +
+                step.a +
+                ", " +
+                step.b +
+                ")";
 
 
-            /*
-                Fill 4L
-            */
+            box.appendChild(div);
 
-            states.push({
-                state: [4, b],
-                action: "Fill the 4-liter jug"
-            });
-
-
-            /*
-                Fill 3L
-            */
-
-            states.push({
-                state: [a, 3],
-                action: "Fill the 3-liter jug"
-            });
-
-
-            /*
-                Empty 4L
-            */
-
-            states.push({
-                state: [0, b],
-                action: "Empty the 4-liter jug"
-            });
-
-
-            /*
-                Empty 3L
-            */
-
-            states.push({
-                state: [a, 0],
-                action: "Empty the 3-liter jug"
-            });
-
-
-            /*
-                Pour 4L → 3L
-            */
-
-            let pour43 =
-                Math.min(a, 3 - b);
-
-            states.push({
-
-                state: [
-                    a - pour43,
-                    b + pour43
-                ],
-
-                action:
-                    "Pour water from 4L → 3L"
-
-            });
-
-
-            /*
-                Pour 3L → 4L
-            */
-
-            let pour34 =
-                Math.min(b, 4 - a);
-
-            states.push({
-
-                state: [
-                    a + pour34,
-                    b - pour34
-                ],
-
-                action:
-                    "Pour water from 3L → 4L"
-
-            });
-
-
-            /*
-                Add new states
-            */
-
-            for (let item of states) {
-
-                let key =
-                    item.state[0] +
-                    "," +
-                    item.state[1];
-
-
-                if (!visited.has(key)) {
-
-                    visited.add(key);
-
-                    queue.push(item.state);
-
-                    parent.set(
-                        key,
-                        a + "," + b
-                    );
-
-                    action.set(
-                        key,
-                        item.action
-                    );
-
-                }
-
-            }
-
-        }
-
-        return [];
+        });
 
     }
 
 
     /*
     ==========================================
-    SOLVE GAME
-    ==========================================
-    */
-
-    function solveGame() {
-
-        resetGame(false);
-
-        solution = findSolution();
-
-        currentStep = 0;
-
-        solving = true;
-
-        showSolution();
-
-        setStatus(
-            "🧠 AI found a solution! Starting...",
-            "#16a34a"
-        );
-
-
-        setTimeout(() => {
-
-            autoStep();
-
-        }, 1000);
-
-    }
-
-
-    /*
-    ==========================================
-    AUTOMATIC STEP
-    ==========================================
-    */
-
-    function autoStep() {
-
-        if (!solving) return;
-
-        if (currentStep >= solution.length) {
-
-            solving = false;
-
-            setStatus(
-                "🎉 SOLVED! Exactly 2 liters measured! 🏆",
-                "green"
-            );
-
-            return;
-
-        }
-
-
-        executeAction(
-            solution[currentStep]
-        );
-
-
-        highlightStep(currentStep);
-
-
-        currentStep++;
-
-
-        setTimeout(
-            autoStep,
-            1200
-        );
-
-    }
-
-
-    /*
-    ==========================================
-    NEXT STEP
+    GO TO NEXT STEP
     ==========================================
     */
 
     function nextStep() {
 
-        if (solution.length === 0) {
+        if (currentStep >= solution.length - 1) {
 
-            solution = findSolution();
-
-            showSolution();
-
-        }
-
-        if (currentStep >= solution.length) {
-
-            setStatus(
-                "🎉 Solution completed!",
-                "green"
-            );
+            document.getElementById("status")
+                .innerHTML =
+                "🎉 <span class='success'>Solved! Exactly 2 Litres!</span>";
 
             return;
-
         }
-
-
-        executeAction(
-            solution[currentStep]
-        );
-
-
-        highlightStep(currentStep);
 
 
         currentStep++;
 
-    }
 
+        jug4 =
+            solution[currentStep].a;
 
-    /*
-    ==========================================
-    EXECUTE ACTION
-    ==========================================
-    */
+        jug3 =
+            solution[currentStep].b;
 
-    function executeAction(action) {
-
-        if (action === "Fill the 4-liter jug") {
-
-            jug4 = 4;
-
-        }
-
-        else if (action === "Fill the 3-liter jug") {
-
-            jug3 = 3;
-
-        }
-
-        else if (action === "Empty the 4-liter jug") {
-
-            jug4 = 0;
-
-        }
-
-        else if (action === "Empty the 3-liter jug") {
-
-            jug3 = 0;
-
-        }
-
-        else if (
-            action ===
-            "Pour water from 4L → 3L"
-        ) {
-
-            let amount =
-                Math.min(jug4, 3 - jug3);
-
-            jug4 -= amount;
-
-            jug3 += amount;
-
-        }
-
-        else if (
-            action ===
-            "Pour water from 3L → 4L"
-        ) {
-
-            let amount =
-                Math.min(jug3, 4 - jug4);
-
-            jug3 -= amount;
-
-            jug4 += amount;
-
-        }
-
-
-        moves++;
 
         render();
 
-        checkGoal();
-
-    }
+        showSteps();
 
 
-    /*
-    ==========================================
-    SHOW SOLUTION
-    ==========================================
-    */
-
-    function showSolution() {
-
-        const box =
-            document.getElementById(
-                "solutionSteps"
-            );
-
-        box.innerHTML = "";
-
-        solution.forEach(
-            (step, index) => {
-
-                const div =
-                    document.createElement("div");
-
-                div.className = "step";
-
-                div.id =
-                    "step-" + index;
-
-                div.textContent =
-                    (index + 1) +
-                    ". " +
-                    step;
-
-                box.appendChild(div);
-
-            }
-        );
-
-    }
+        document.getElementById("status")
+            .textContent =
+            solution[currentStep].action;
 
 
-    /*
-    ==========================================
-    HIGHLIGHT STEP
-    ==========================================
-    */
+        /*
+            Check goal
+        */
 
-    function highlightStep(index) {
+        if (jug4 === 2 || jug3 === 2) {
 
-        document
-            .querySelectorAll(".step")
-            .forEach(element => {
-
-                element.classList.remove(
-                    "current"
-                );
-
-            });
-
-
-        const element =
-            document.getElementById(
-                "step-" + index
-            );
-
-
-        if (element) {
-
-            element.classList.add(
-                "current"
-            );
+            document.getElementById("status")
+                .innerHTML =
+                "🎉 <span class='success'>" +
+                "SUCCESS! Exactly 2 Litres measured!" +
+                "</span>";
 
         }
 
@@ -1064,25 +559,40 @@
 
     /*
     ==========================================
-    STATUS
+    AUTOMATIC SOLVER
     ==========================================
     */
 
-    function setStatus(
-        message,
-        color
-    ) {
+    function solve() {
 
-        const status =
-            document.getElementById(
-                "status"
-            );
+        resetGame();
 
-        status.textContent =
-            message;
+        currentStep = 0;
 
-        status.style.color =
-            color;
+        showSteps();
+
+
+        /*
+            Automatically perform
+            each step every 1.5 seconds.
+        */
+
+        timer = setInterval(function() {
+
+            if (
+                currentStep <
+                solution.length - 1
+            ) {
+
+                nextStep();
+
+            } else {
+
+                clearInterval(timer);
+
+            }
+
+        }, 1500);
 
     }
 
@@ -1093,38 +603,32 @@
     ==========================================
     */
 
-    function resetGame(clearSolution = true) {
+    function resetGame() {
 
-        solving = false;
+        if (timer) {
+
+            clearInterval(timer);
+
+            timer = null;
+
+        }
+
 
         jug4 = 0;
 
         jug3 = 0;
 
-        moves = 0;
-
         currentStep = 0;
 
 
-        if (clearSolution) {
-
-            solution = [];
-
-            document.getElementById(
-                "solutionSteps"
-            ).innerHTML =
-                'Click <b>🧠 Solve Automatically</b> to find the solution.';
-
-        }
-
-
-        setStatus(
-            "Ready! Goal: Get exactly 2 liters.",
-            "#17324d"
-        );
+        document.getElementById("status")
+            .textContent =
+            'Click "Solve Automatically" to start.';
 
 
         render();
+
+        showSteps();
 
     }
 
@@ -1137,10 +641,10 @@
 
     render();
 
+    showSteps();
+
 </script>
 
 </body>
 
 </html>
-
-
